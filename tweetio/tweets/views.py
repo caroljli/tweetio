@@ -7,14 +7,16 @@ def splash(request):
 	return render(request, "splash.html", {})
 
 def home(request):
-	return render(request, "home.html", {})
+    tweets = Tweet.objects.all()
+    return render(request, "home.html", {"tweets": tweet})
 
 def profile(request):
     return render(request, "profile.html", {})
 
 def self(request):
-    account = Account.objects.all()
-    return render(request, "self.html", {"account" : account})
+    account = Account.objects.get(id=request.GET['id'])
+    tweets = Tweet.objects.filter(author=request.user)
+    return render(request, "self.html", {"account": account, "tweets": tweets})
 
 def hashtag(request):
     return render(request, "hashtag.html", {})
@@ -25,7 +27,7 @@ def register_complete(request):
 # USER AUTHENTICATION
 
 # redirects to self
-def login(request):
+def login_view(request):
     if request.method == "POST":
         username = request.POST["username"]
         password = request.POST["password"]
@@ -33,7 +35,8 @@ def login(request):
         if user is not None:
             login(request, user)
             return redirect("/self")
-    return render(request, "login.html", {})
+        else:
+            return render(request, "login.html", {})
 
 def logout_(request):
     logout(request)
@@ -45,5 +48,6 @@ def register(request):
                                     password=request.POST['password'])
     return redirect('/register-complete')
 
-def register(request):
-    return render(request, "register.html", {})
+def delete_tweet(reqest):
+    tweet = Tweet.objects.get(id=request.GET['id'])
+    tweet.delete()

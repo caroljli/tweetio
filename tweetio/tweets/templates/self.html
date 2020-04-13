@@ -17,6 +17,8 @@
   }
 </style>
 
+{% if account.is_authenticated %}
+
 <div class="columns">
     <div class="column is-one-quarter"></div>
     <div class="column">
@@ -162,6 +164,10 @@
                 
               </table>
 
+              <div class="buttons has-addons is-centered">
+                <input type="submit" value="logout" class="button is-danger"></input>
+              </div>
+
             </section>
           </div>
         </div>
@@ -216,6 +222,20 @@
 
     <div class="column is-one-quarter"></div>
 </div>
+
+{% else %}
+
+<div class="columns">
+  <div class="column is-one-quarter"></div>
+  <div class="column">
+      <h1 class="title">oops!</h1>
+      <h2 class="subtitle">please <a href="/login/">log in</a>to your tweety account to continue</h2>
+      </br>
+  </div>
+  <div class="column is-one-quarter"></div>
+</div>
+
+{% endif %}
 
 <script>
   // new post modal

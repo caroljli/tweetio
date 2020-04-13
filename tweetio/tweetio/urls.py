@@ -15,13 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from tweets.views import splash, home, login, register, profile, self, hashtag, register_complete
+from tweets.views import splash, home, login_view, register, profile, self, hashtag, register_complete
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', splash, name='splash'),
     path('home/', home, name='home'),
-    path('login/', login, name='login'),
+    path('login/', login_view, name='login'),
     path('register/', register, name='register'),
     path('self/', self, name='self'),
     path('profile/', profile, name='profile'),

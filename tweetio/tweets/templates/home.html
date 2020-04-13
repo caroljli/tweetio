@@ -9,15 +9,16 @@
             <div class="hero-body">
               <div class="container">
                 <h1 class="title">
-                  welcome back, name!
+                  hello!
                 </h1>
                 <h2 class="subtitle">
-                  here are the most recent tweets from everyone else 0:
+                  here are the most recent tweets from all tweety users
                 </h2>
               </div>
             </div>
         </section>
         </br>
+        {% for tweet in tweeets %}
         <div class="box">
             <article class="media">
                 <figure class="media-left">
@@ -28,19 +29,13 @@
                 <div class="media-content">
                   <div class="content">
                     <p>
-                      <strong>John Smith</strong> <small>@johnsmith</small> <small>31m</small>
+                      <strong>{{ tweet.author }}</strong> <small>{{ tweet.author.username }}</small> <small>{{ tweet.time }}</small>
                       <br>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare magna eros, eu pellentesque tortor vestibulum ut. Maecenas non massa sem. Etiam finibus odio quis feugiat facilisis.
+                      {{ tweet.body }}
                     </p>
                   </div>
                   <nav class="level is-mobile">
                     <div class="level-left">
-                      <a class="level-item">
-                        <span class="icon is-small"><i class="fas fa-reply"></i></span>
-                      </a>
-                      <a class="level-item">
-                        <span class="icon is-small"><i class="fas fa-retweet"></i></span>
-                      </a>
                       <a class="level-item">
                         <span class="icon is-small"><i class="fas fa-heart"></i></span>
                       </a>

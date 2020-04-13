@@ -8,72 +8,76 @@
         <h1 class="title">don't have an account?</h1>
         <h2 class="subtitle">no worries. it's easy to get started with tweety.</h2>
         </br>
+
         <div class="box">
-            <div class="field">
-                <label class="label">full name</label>
-                <div class="control">
-                  <input class="input" type="text" placeholder="eg. carol li">
+            <form method="POST" action="/register-complete/">
+                {% csrf_token %}
+                <div class="field">
+                    <label class="label">full name</label>
+                    <div class="control">
+                      <input class="input" type="text" placeholder="eg. carol li">
+                    </div>
                 </div>
-            </div>
-              
-            <div class="field">
-                <label class="label">username</label>
-                <div class="control has-icons-left has-icons-right">
-                  <input class="input" type="text" placeholder="eg. saltyfugu">
-                  <span class="icon is-small is-left">
-                    <i class="fas fa-user"></i>
-                  </span>
+                  
+                <div class="field">
+                    <label class="label">username</label>
+                    <div class="control has-icons-left has-icons-right">
+                      <input name="username" class="input" type="text" placeholder="eg. saltyfugu">
+                      <span class="icon is-small is-left">
+                        <i class="fas fa-user"></i>
+                      </span>
+                    </div>
                 </div>
-            </div>
-              
-            <div class="field">
-                <label class="label">email</label>
-                <div class="control has-icons-left has-icons-right">
-                  <input class="input" type="email" placeholder="eg. saltyfugu@tweet.io">
-                  <span class="icon is-small is-left">
-                    <i class="fas fa-envelope"></i>
-                  </span>
+                  
+                <div class="field">
+                    <label class="label">email</label>
+                    <div class="control has-icons-left has-icons-right">
+                      <input name="username" class="input" type="email" placeholder="eg. saltyfugu@tweet.io">
+                      <span class="icon is-small is-left">
+                        <i class="fas fa-envelope"></i>
+                      </span>
+                    </div>
                 </div>
-            </div>
-              
-            <div class="field">
-                <label class="label">pronouns</label>
-                <div class="control">
-                  <div class="select">
-                    <select>
-                      <option>they/them</option>
-                      <option>he/him</option>
-                      <option>she/her</option>
-                    </select>
-                  </div>
+
+                <div class="field">
+                    <label class="label">password</label>
+                    <div class="control">
+                      <input name="password" class="input" type="password">
+                    </div>
                 </div>
-            </div>
-              
-            <div class="field">
-                <label class="label">bio</label>
-                <div class="control">
-                  <textarea class="textarea" placeholder="eg. i like to drink coffee!"></textarea>
+                  
+                <div class="field">
+                    <label class="label">location</label>
+                    <div class="control">
+                        <input name="location" class="input" placeholder="eg. vancouver!">
+                      </div>
                 </div>
-            </div>
-              
-            <div class="field">
-                <div class="control">
-                  <label class="checkbox">
-                    <input type="checkbox">
-                    I agree to the <a href="#">terms and conditions</a>
+                  
+                <div class="field">
+                    <label class="label">bio</label>
+                    <div class="control">
+                      <textarea class="textarea" placeholder="eg. i like to drink coffee!"></textarea>
+                    </div>
+                </div>
+                  
+                <div class="field">
+                    <div class="control">
+                      <label class="checkbox">
+                        <input type="checkbox">
+                        I agree to the <a href="#">terms and conditions</a>
+                        <!-- TODO: modal popup here -->
+                      </label>
+                    </div>
+                </div>
+                  
+                <div class="buttons has-addons is-centered">
+                    <a href="/register-complete" class="button is-primary">
+                        register
+                    </a>
+                    <button class="button">cancel</button>
                     <!-- TODO: modal popup here -->
-                  </label>
                 </div>
-            </div>
-              
-            <div class="buttons has-addons is-centered">
-                <a href="/register-complete" class="button is-primary">
-                    register
-                </a>
-                <button class="button">cancel</button>
-                <!-- TODO: modal popup here -->
-            </div>
-            
+            </form>
         </div>
 
     </div>

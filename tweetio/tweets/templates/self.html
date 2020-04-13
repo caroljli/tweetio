@@ -2,6 +2,21 @@
 
 {% block content %}
 
+<style>
+  #tabs-with-content .tabs:not(:last-child) {
+    margin-bottom: 0;
+  }
+
+  #tabs-with-content .tab-content {
+    padding: 1rem;
+    display: none;
+  }
+
+  #tabs-with-content .tab-content.is-active {
+    display: block;
+  }
+</style>
+
 <div class="columns">
     <div class="column is-one-quarter"></div>
     <div class="column">
@@ -13,7 +28,7 @@
                 welcome back, name!
               </h1>
               <h2 class="subtitle">
-                here are your most recent tweets
+                view your tweets, see your profile, access settings
               </h2>
             </div>
           </div>
@@ -21,67 +36,251 @@
 
         </br>
 
-        <div class="tabs is-boxed is-small">
-          <ul>
-            <li class="is-active">
-              <a>
-                <span class="icon is-small"><i class="fas fa-image" aria-hidden="true"></i></span>
-                <span>posts</span>
-              </a>
-            </li>
-            <li>
-              <a>
-                <span class="icon is-small"><i class="fas fa-music" aria-hidden="true"></i></span>
-                <span>profile</span>
-              </a>
-            </li>
-            <li>
-              <a>
-                <span class="icon is-small"><i class="fas fa-film" aria-hidden="true"></i></span>
-                <span>account settings</span>
-              </a>
-            </li>
-          </ul>
+        <div id="tabs-with-content">
+          <div class="tabs is-boxed is-small">
+            <ul>
+              <li class="is-active">
+                <a>
+                  <span class="icon is-small"><i class="fas fa-pen" aria-hidden="true"></i></span>
+                  <span>tweets</span>
+                </a>
+              </li>
+              <li>
+                <a>
+                  <span class="icon is-small"><i class="far fa-address-card" aria-hidden="true"></i></span>
+                  <span>profile</span>
+                </a>
+              </li>
+              <li>
+                <a>
+                  <span class="icon is-small"><i class="far fa-address-book" aria-hidden="true"></i></span>
+                  <span>account settings</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <section class="tab-content">
+
+              </br>
+
+              <div class="buttons has-addons is-centered">
+                <button class="button is-primary is-fullwidth" id="newpost_button">new post</button>
+              </div>
+
+              <div class="box">
+                <article class="media">
+                    <figure class="media-left">
+                      <p class="image is-64x64">
+                        <img src="https://bulma.io/images/placeholders/128x128.png">
+                      </p>
+                    </figure>
+                    <div class="media-content">
+                      <div class="content">
+                        <p>
+                          <strong>John Smith</strong> <small>@johnsmith</small> <small>31m</small>
+                          <br>
+                          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare magna eros, eu pellentesque tortor vestibulum ut. Maecenas non massa sem. Etiam finibus odio quis feugiat facilisis.
+                        </p>
+                      </div>
+                      <nav class="level is-mobile">
+                        <div class="level-left">
+                          <a class="level-item">
+                            <span class="icon is-small"><i class="fas fa-reply"></i></span>
+                          </a>
+                          <a class="level-item">
+                            <span class="icon is-small"><i class="fas fa-retweet"></i></span>
+                          </a>
+                          <a class="level-item">
+                            <span class="icon is-small"><i class="fas fa-heart"></i></span>
+                          </a>
+                        </div>
+                      </nav>
+                    </div>
+                    <div class="media-right">
+                      <button class="delete" id="delete_button"></button>
+                    </div>
+                </article>
+              </div> 
+
+            </section>
+            <section class="tab-content">
+
+              </br>
+
+              <h1 class="title">carol's profile</h1>
+
+              <div class="box">
+                <h2>canadian bean juice only 🇨🇦</h2>
+                <h2><strong>location:</strong> vancouver!</h2>
+              </div>
+
+              <div class="box">
+                <h2><strong>favourite hashtags</strong></h2>
+                <h2><a>#pancakes</a></h2>
+                <h2><a>#canada</a></h2>
+                <h2><a>#coffee</a></h2>
+              </div>
+              
+            </section>
+            <section class="tab-content">
+              
+              </br>
+
+              <h1 class="title">account settings</h1>
+              <table class="table is-fullwidth is-hoverable">
+                <tbody>
+                  <tr>
+                    <th>username</th>
+                    <td>@saltyfugu</td>
+                  </tr>
+                  <tr>
+                    <th>email</th>
+                    <td>saltyfugu@tweet.io</td>
+                  </tr>
+                  <tr>
+                    <th>full name</th>
+                    <td>carol li</td>
+                  </tr>
+                  <tr>
+                    <th>bio</th>
+                    <td>canadian bean juice only 🇨🇦</td>
+                  </tr>
+                  <tr>
+                    <th>location</th>
+                    <td>vancouver</td>
+                  </tr>
+                  <tr>
+                    <th>joined on</th>
+                    <td>2020/04/12</td>
+                  </tr>
+                  <tr>
+                    <th>password</th>
+                    <td>********</td>
+                  </tr>
+                </tbody>
+                
+              </table>
+
+            </section>
+          </div>
+        </div>
+<!-- 
+        <div class="section">
+          <h2 class="subtitle">your most recent tweets</h2>
+        </div> -->
+
+        <!-- new post modal -->
+        <div class="modal" id="newpost_modal">
+          <div class="modal-background"></div>
+          <div class="modal-card">
+            <header class="modal-card-head">
+              <p class="modal-card-title">new post</p>
+              <button class="delete" aria-label="close" id="newpost_close_modal"></button>
+            </header>
+            <section class="modal-card-body">
+              <form method="POST" action="/self/">
+                {% csrf_token %}
+                  <div class="field">
+                      <label class="label">post content</label>
+                      <div class="control">
+                        <input name="body" class="textarea" placeholder="e.g. i like drinking maple syrup!">
+                      </div>
+                  </div>
+                  <div class="buttons has-addons is-centered">
+                    <input type="submit" value="post" class="button is-primary"></input>
+                  </div>
+              </form>
+            </section>
+          </div>
         </div>
 
-        <div class="box">
-          <article class="media">
-              <figure class="media-left">
-                <p class="image is-64x64">
-                  <img src="https://bulma.io/images/placeholders/128x128.png">
-                </p>
-              </figure>
-              <div class="media-content">
-                <div class="content">
-                  <p>
-                    <strong>John Smith</strong> <small>@johnsmith</small> <small>31m</small>
-                    <br>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare magna eros, eu pellentesque tortor vestibulum ut. Maecenas non massa sem. Etiam finibus odio quis feugiat facilisis.
-                  </p>
-                </div>
-                <nav class="level is-mobile">
-                  <div class="level-left">
-                    <a class="level-item">
-                      <span class="icon is-small"><i class="fas fa-reply"></i></span>
-                    </a>
-                    <a class="level-item">
-                      <span class="icon is-small"><i class="fas fa-retweet"></i></span>
-                    </a>
-                    <a class="level-item">
-                      <span class="icon is-small"><i class="fas fa-heart"></i></span>
-                    </a>
-                  </div>
-                </nav>
-              </div>
-              <div class="media-right">
-                <button class="delete"></button>
-              </div>
-          </article>
-        </div> 
+         <!-- delete post modal -->
+         <div class="modal" id="delete_modal">
+          <div class="modal-background"></div>
+          <div class="modal-card">
+            <header class="modal-card-head">
+              <p class="modal-card-title">delete post</p>
+              <button class="delete" aria-label="close" id="delete_close_modal"></button>
+            </header>
+            <section class="modal-card-body">
+              are you sure you want to delete this post?
+            </section>
+            <footer class="modal-card-foot">
+              <button class="button is-danger">delete</button>
+            </footer>
+          </div>
+        </div>
         
       </div>
 
     <div class="column is-one-quarter"></div>
 </div>
+
+<script>
+  // new post modal
+  var modal = document.getElementById("newpost_modal")
+  var button = document.getElementById("newpost_button")
+  var close_modal = document.getElementById("newpost_close_modal")
+
+  button.onclick = function() {
+    modal.style.display="flex";
+  }
+
+  close_modal.onclick = function() {
+    modal.style.display="none";
+  }
+  
+  // delete modal
+  var delete_modal = document.getElementById("delete_modal")
+  var delete_button = document.getElementById("delete_button")
+  var delete_close_modal = document.getElementById("delete_close_modal")
+
+  delete_button.onclick = function() {
+    delete_modal.style.display="flex";
+  }
+
+  delete_close_modal.onclick = function() {
+    delete_modal.style.display="none";
+  }
+
+  // tabs
+  let tabsWithContent = (function () {
+  let tabs = document.querySelectorAll('.tabs li');
+  let tabsContent = document.querySelectorAll('.tab-content');
+
+  let deactvateAllTabs = function () {
+    tabs.forEach(function (tab) {
+      tab.classList.remove('is-active');
+    });
+  };
+
+  let hideTabsContent = function () {
+    tabsContent.forEach(function (tabContent) {
+      tabContent.classList.remove('is-active');
+    });
+  };
+
+  let activateTabsContent = function (tab) {
+    tabsContent[getIndex(tab)].classList.add('is-active');
+  };
+
+  let getIndex = function (el) {
+    return [...el.parentElement.children].indexOf(el);
+  };
+
+  tabs.forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      deactvateAllTabs();
+      hideTabsContent();
+      tab.classList.add('is-active');
+      activateTabsContent(tab);
+    });
+  })
+
+  tabs[0].click();
+})();
+  
+</script>
 
 {% endblock %}

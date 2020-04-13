@@ -18,7 +18,7 @@
             </div>
         </section>
         </br>
-        {% for tweet in tweeets %}
+        {% for tweet in tweets %}
         <div class="box">
             <article class="media">
                 <figure class="media-left">
@@ -29,7 +29,7 @@
                 <div class="media-content">
                   <div class="content">
                     <p>
-                      <strong>{{ tweet.author }}</strong> <small>{{ tweet.author.username }}</small> <small>{{ tweet.time }}</small>
+                      <strong>temp</strong> <small>@temp</small> <small>{{ tweet.time }}</small>
                       <br>
                       {{ tweet.body }}
                     </p>
@@ -44,6 +44,7 @@
                 </div>
             </article>
         </div> 
+        {% endfor %}
 
     </div>
     <div class="column is-one-quarter"></div>

@@ -17,7 +17,7 @@
   }
 </style>
 
-{% if account.is_authenticated %}
+{% if user.is_authenticated %}
 
 <div class="columns">
     <div class="column is-one-quarter"></div>
@@ -27,7 +27,7 @@
           <div class="hero-body">
             <div class="container">
               <h1 class="title">
-                welcome back, name!
+                welcome back, {{ user.username }}
               </h1>
               <h2 class="subtitle">
                 view your tweets, see your profile, access settings
@@ -70,6 +70,7 @@
                 <button class="button is-primary is-fullwidth" id="newpost_button">new post</button>
               </div>
 
+              {% for tweet in tweets %}
               <div class="box">
                 <article class="media">
                     <figure class="media-left">
@@ -80,9 +81,9 @@
                     <div class="media-content">
                       <div class="content">
                         <p>
-                          <strong>John Smith</strong> <small>@johnsmith</small> <small>31m</small>
+                          <strong>temp</strong> <small>@temp</small> <small>{{ tweet.time }}</small>
                           <br>
-                          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare magna eros, eu pellentesque tortor vestibulum ut. Maecenas non massa sem. Etiam finibus odio quis feugiat facilisis.
+                          {{ tweet.body }}
                         </p>
                       </div>
                       <nav class="level is-mobile">
@@ -104,6 +105,28 @@
                     </div>
                 </article>
               </div> 
+
+              <!-- delete post modal -->
+              <div class="modal" id="delete_modal">
+                <div class="modal-background"></div>
+                <div class="modal-card">
+                  <header class="modal-card-head">
+                    <p class="modal-card-title">delete post</p>
+                    <button class="delete" aria-label="close" id="delete_close_modal"></button>
+                  </header>
+                  <section class="modal-card-body">
+                      are you sure you want to delete this post?
+                  </section>
+                  <footer class="modal-card-foot">
+                    <form method="POST" action="/delete_tweet/">
+                      {% csrf_token %}
+                      <input type="submit" class="button is-danger" value="delete"></input>
+                    </form>
+                  </footer>
+                </div>
+              </div>
+
+              {% endfor %}
 
             </section>
             <section class="tab-content">
@@ -165,7 +188,7 @@
               </table>
 
               <div class="buttons has-addons is-centered">
-                <input type="submit" value="logout" class="button is-danger"></input>
+                <a class="button is-danger" href="/logout/">log out</a>
               </div>
 
             </section>
@@ -198,23 +221,6 @@
                   </div>
               </form>
             </section>
-          </div>
-        </div>
-
-         <!-- delete post modal -->
-         <div class="modal" id="delete_modal">
-          <div class="modal-background"></div>
-          <div class="modal-card">
-            <header class="modal-card-head">
-              <p class="modal-card-title">delete post</p>
-              <button class="delete" aria-label="close" id="delete_close_modal"></button>
-            </header>
-            <section class="modal-card-body">
-              are you sure you want to delete this post?
-            </section>
-            <footer class="modal-card-foot">
-              <button class="button is-danger">delete</button>
-            </footer>
           </div>
         </div>
         

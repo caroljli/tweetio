@@ -34,7 +34,7 @@ from django.contrib.auth.models import User
     # REQUIRED_FIELDS = ["username", "email"]
 
 class Tweet(models.Model):
-    # author = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True)
+    author = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True)
     time = models.DateTimeField(auto_now=True, null=True)
     body = models.TextField(null=True)
     liked = False

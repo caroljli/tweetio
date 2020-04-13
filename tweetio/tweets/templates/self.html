@@ -81,19 +81,13 @@
                     <div class="media-content">
                       <div class="content">
                         <p>
-                          <strong>temp</strong> <small>@temp</small> <small>{{ tweet.time }}</small>
+                          <strong>temp</strong> <small>@{{ user.username }}</small> <small>{{ tweet.time }}</small>
                           <br>
                           {{ tweet.body }}
                         </p>
                       </div>
                       <nav class="level is-mobile">
                         <div class="level-left">
-                          <a class="level-item">
-                            <span class="icon is-small"><i class="fas fa-reply"></i></span>
-                          </a>
-                          <a class="level-item">
-                            <span class="icon is-small"><i class="fas fa-retweet"></i></span>
-                          </a>
                           <a class="level-item">
                             <span class="icon is-small"><i class="fas fa-heart"></i></span>
                           </a>
@@ -272,39 +266,39 @@
 
   // tabs
   let tabsWithContent = (function () {
-  let tabs = document.querySelectorAll('.tabs li');
-  let tabsContent = document.querySelectorAll('.tab-content');
+    let tabs = document.querySelectorAll('.tabs li');
+    let tabsContent = document.querySelectorAll('.tab-content');
 
-  let deactvateAllTabs = function () {
+    let deactvateAllTabs = function () {
+      tabs.forEach(function (tab) {
+        tab.classList.remove('is-active');
+      });
+    };
+
+    let hideTabsContent = function () {
+      tabsContent.forEach(function (tabContent) {
+        tabContent.classList.remove('is-active');
+      });
+    };
+
+    let activateTabsContent = function (tab) {
+      tabsContent[getIndex(tab)].classList.add('is-active');
+    };
+
+    let getIndex = function (el) {
+      return [...el.parentElement.children].indexOf(el);
+    };
+
     tabs.forEach(function (tab) {
-      tab.classList.remove('is-active');
-    });
-  };
+      tab.addEventListener('click', function () {
+        deactvateAllTabs();
+        hideTabsContent();
+        tab.classList.add('is-active');
+        activateTabsContent(tab);
+      });
+    })
 
-  let hideTabsContent = function () {
-    tabsContent.forEach(function (tabContent) {
-      tabContent.classList.remove('is-active');
-    });
-  };
-
-  let activateTabsContent = function (tab) {
-    tabsContent[getIndex(tab)].classList.add('is-active');
-  };
-
-  let getIndex = function (el) {
-    return [...el.parentElement.children].indexOf(el);
-  };
-
-  tabs.forEach(function (tab) {
-    tab.addEventListener('click', function () {
-      deactvateAllTabs();
-      hideTabsContent();
-      tab.classList.add('is-active');
-      activateTabsContent(tab);
-    });
-  })
-
-  tabs[0].click();
+    tabs[0].click();
 })();
   
 </script>

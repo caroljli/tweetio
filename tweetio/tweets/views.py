@@ -22,8 +22,8 @@ def self(request):
     # tweets = Tweet.objects.filter(author=request.user)
     if request.method == 'POST':
         body = request.POST["body"]
-        Tweet.objects.create(body=body)
-    tweets = Tweet.objects.all()
+        Tweet.objects.create(body=body, author=request.user)
+    tweets = Tweet.objects.filter(author=request.user)
     return render(request, "self.html", {"tweets": tweets})
 
 def hashtag(request):

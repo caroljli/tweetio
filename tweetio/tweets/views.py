@@ -81,12 +81,19 @@ def delete_tweet(request):
     tweet = Tweet.objects.get(id=request.GET.get('id'))
     tweet.delete()
 
-def like(request):
+def like_clicked(request, post_id):
     if request.method == 'POST':
-        profile = Account.objects.get(user=request.GET.get('user'))
-        post = Tweet.objects.get(user=request.GET.get('user'))
-        like = Like.object.create(profile=profile, post=post)
+        if request.user.is_authenticated():
+            post = Tweet.objects.get(id=post_id)
+            if not already_liked_post(request.user, id):
+                Like.objects.create(user=request.user, post=post)
+            else:
+                Like.objects.filter(user=request.user, post=post).delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+def already_liked_post(user, post_id):
+    post = Tweet.objects.get(id=post_id)
+    return Like.objects.filer(user=user, post=post).exists()
 
 def newpost(request):
     if request.method == 'POST':

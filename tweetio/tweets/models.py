@@ -10,6 +10,7 @@ class Account(models.Model):
     time = models.DateTimeField(auto_now=True, null=True)
 
 class Tweet(models.Model):
+    id = models.AutoField(primary_key=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     profile = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
     time = models.DateTimeField(auto_now=True, null=True)
@@ -27,9 +28,12 @@ class Tweet(models.Model):
             return "user"
 
 class Like(models.Model):
-    profile = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    post = models.ForeignKey(Tweet, on_delete=models.CASCADE, null=True)
+    user = models.ManyToManyField(User, on_delete=models.CASCADE, null=True)
+    post = models.OneToOneField(Tweet, on_delete=models.CASCADE, null=True)
     time = models.DateTimeField(auto_now=True, null=True)
+
+    def __str__(self):
+        return self.post
 
 class Hashtag(models.Model):
     pass

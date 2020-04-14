@@ -15,7 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from tweets.views import splash, home, login,register, login_view, register_view, profile, self, hashtag, register_complete, logout_view, delete_tweet
+from django.conf.urls import url
+from tweets.views import splash, home, login,register, login_view, register_view, profile, self, hashtag, register_complete, logout_view, delete_tweet, newpost, like
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,9 +27,11 @@ urlpatterns = [
     path('login_view/', login_view, name='login_view'),
     path('register_view/', register_view, name='register_view'),
     path('self/', self, name='self'),
-    path('profile/', profile, name='profile'),
     path('hashtag/', hashtag, name='hashtag'),
     path('register-complete/', register_complete, name="register-complete"),
     path('logout/', logout_view, name="logout"),
-    path('delete_tweet/', delete_tweet, name='delete_tweet')
+    path('delete_tweet/', delete_tweet, name='delete_tweet'),
+    path('newpost/', newpost, name="newpost"),
+    path('like/', like, name="like"),
+    path('profile/<slug:username>', profile, name="profile"),
 ]

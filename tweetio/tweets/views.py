@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib.auth.models import User
-from tweets.models import Tweet
+from tweets.models import Tweet, Account, Like
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
 
 def splash(request):
     if request.user.is_authenticated:
@@ -12,19 +13,25 @@ def splash(request):
 
 def home(request):
     tweets = Tweet.objects.all()
-    return render(request, "home.html", {"tweets": tweets})
+    accounts = Account.objects.all()
+    return render(request, "home.html", {"tweets": tweets, "accounts": accounts})
 
-def profile(request):
-    return render(request, "profile.html", {})
+def profile(request, username=None):
+    if User.objects.get(username=username):
+        user = User.objects.get(username=username)
+        account = Account.objects.filter(user=user)
+        tweets = Tweet.objects.filter(author=user)
+        return render(request, "profile.html", {
+            "user": user, "account": account, "tweets": tweets
+        })
+    else:
+        return render("user not found")
 
 def self(request):
-    # account = Account.objects.get(id=request.GET['id'])
-    # tweets = Tweet.objects.filter(author=request.user)
-    if request.method == 'POST':
-        body = request.POST["body"]
-        Tweet.objects.create(body=body, author=request.user)
+    account = Account.objects.filter(user=request.user)
     tweets = Tweet.objects.filter(author=request.user)
-    return render(request, "self.html", {"tweets": tweets})
+    likes = Like.objects.filter(profile=request.user)
+    return render(request, "self.html", {"tweets": tweets, "account": account})
 
 def hashtag(request):
     return render(request, "hashtag.html", {})
@@ -56,21 +63,33 @@ def logout_view(request):
     return redirect("/")
 
 def register_view(request):
+    name = request.POST["name"]
     username = request.POST["username"]
     password = password = request.POST["password"]
-    email = email = request.POST["email"]
-    User.objects.create(username=username, password=password, email=email)
-    # location = request.POST.get("location")
-    # bio = request.POST.get("bio")
-    # Account.objects.create(user, location, bio)
-
-    # accounts = Account.objects.all()
+    email = request.POST["email"]
+    location = request.POST["location"]
+    bio = request.POST["bio"]
+    user = User.objects.create(username=username, password=password, email=email)
+    user.set_password(password)
+    user.save()
+    Account.objects.create(user=user, name=name, location=location, bio=bio)
     return redirect('/register-complete')
-    # return render(request, "register.html", {"accounts": accounts})
-    # return render(request, "register.html", {"users": users})
 
 # posts
 
 def delete_tweet(request):
     tweet = Tweet.objects.get(id=request.GET.get('id'))
     tweet.delete()
+
+def like(request):
+    if request.method == 'POST':
+        profile = Account.objects.get(user=request.GET.get('user'))
+        post = Tweet.objects.get(user=request.GET.get('user'))
+        like = Like.object.create(profile=profile, post=post)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+def newpost(request):
+    if request.method == 'POST':
+        body = request.POST["body"]
+        Tweet.objects.create(body=body, author=request.user)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

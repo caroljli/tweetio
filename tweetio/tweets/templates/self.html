@@ -19,6 +19,8 @@
 
 {% if user.is_authenticated %}
 
+{% for account in account %}
+
 <div class="columns">
     <div class="column is-one-quarter"></div>
     <div class="column">
@@ -27,14 +29,22 @@
           <div class="hero-body">
             <div class="container">
               <h1 class="title">
-                welcome back, {{ user.username }}
+                welcome back, {{ account.name }}!
               </h1>
               <h2 class="subtitle">
-                view your tweets, see your profile, access settings
+                view your tweets, profile, and account
               </h2>
             </div>
           </div>
         </section>
+
+        </br>
+
+        <div class="buttons has-addons is-centered">
+          <button class="button is-primary is-fullwidth" id="newpost_button">
+            <strong>new post</strong>
+          </button>
+        </div>
 
         </br>
 
@@ -56,19 +66,16 @@
               <li>
                 <a>
                   <span class="icon is-small"><i class="far fa-address-book" aria-hidden="true"></i></span>
-                  <span>account settings</span>
+                  <span>account</span>
                 </a>
               </li>
             </ul>
           </div>
           <div>
+            
             <section class="tab-content">
 
               </br>
-
-              <div class="buttons has-addons is-centered">
-                <button class="button is-primary is-fullwidth" id="newpost_button">new post</button>
-              </div>
 
               {% for tweet in tweets %}
               <div class="box">
@@ -81,18 +88,11 @@
                     <div class="media-content">
                       <div class="content">
                         <p>
-                          <strong>temp</strong> <small>@{{ user.username }}</small> <small>{{ tweet.time }}</small>
+                          <strong>{{ account.name }}</strong> <small>@{{ user.username }}</small> <small>{{ tweet.time }}</small>
                           <br>
                           {{ tweet.body }}
                         </p>
                       </div>
-                      <nav class="level is-mobile">
-                        <div class="level-left">
-                          <a class="level-item">
-                            <span class="icon is-small"><i class="fas fa-heart"></i></span>
-                          </a>
-                        </div>
-                      </nav>
                     </div>
                     <div class="media-right">
                       <button class="delete" id="delete_button"></button>
@@ -127,11 +127,11 @@
 
               </br>
 
-              <h1 class="title">carol's profile</h1>
+              <h1 class="title">{{ account.name }}'s profile</h1>
 
               <div class="box">
-                <h2>canadian bean juice only 🇨🇦</h2>
-                <h2><strong>location:</strong> vancouver!</h2>
+                <h2>{{ account.bio }}</h2>
+                <h2><strong>location:</strong> {{ account.location }}</h2>
               </div>
 
               <div class="box">
@@ -151,31 +151,27 @@
                 <tbody>
                   <tr>
                     <th>username</th>
-                    <td>@saltyfugu</td>
+                    <td>@{{ user.username }}</td>
                   </tr>
                   <tr>
                     <th>email</th>
-                    <td>saltyfugu@tweet.io</td>
+                    <td>{{ user.email }}</td>
                   </tr>
                   <tr>
                     <th>full name</th>
-                    <td>carol li</td>
+                    <td>{{ account.name }}</td>
                   </tr>
                   <tr>
                     <th>bio</th>
-                    <td>canadian bean juice only 🇨🇦</td>
+                    <td>{{ account.bio }}</td>
                   </tr>
                   <tr>
                     <th>location</th>
-                    <td>vancouver</td>
+                    <td>{{ account.location }}</td>
                   </tr>
                   <tr>
                     <th>joined on</th>
-                    <td>2020/04/12</td>
-                  </tr>
-                  <tr>
-                    <th>password</th>
-                    <td>********</td>
+                    <td>{{ account.time }}</td>
                   </tr>
                 </tbody>
                 
@@ -202,7 +198,7 @@
               <button class="delete" aria-label="close" id="newpost_close_modal"></button>
             </header>
             <section class="modal-card-body">
-              <form method="POST" action="/self/">
+              <form method="POST" action="/newpost/">
                 {% csrf_token %}
                   <div class="field">
                       <label class="label">post content</label>
@@ -222,6 +218,8 @@
 
     <div class="column is-one-quarter"></div>
 </div>
+
+{% endfor %}
 
 {% else %}
 

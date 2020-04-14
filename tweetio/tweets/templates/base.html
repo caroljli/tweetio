@@ -13,6 +13,27 @@
           <a class="navbar-item" href="/">
             <img src="https://i.imgur.com/jy7xZrJ.png">
           </a>
+
+          {% if user.is_authenticated %}
+          <div class="navbar-start">
+            <a class="navbar-item" href="/">
+              home
+            </a>
+            <a class="navbar-item" href="/self/">
+              my tweets
+            </a>
+          </div>
+
+          <div class="navbar-end">
+            <div class="navbar-item">
+              <div class="buttons">
+                <a class="button is-primary" id="newpost_button">
+                  <strong>new post</strong>
+                </a>
+              </div>
+            </div>
+          </div>
+          {% endif %}
       
           <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
             <span aria-hidden="true"></span>
@@ -36,8 +57,50 @@
           </div>
         </div> -->
       </nav>
+
+      <!-- new post modal -->
+      <div class="modal" id="newpost_modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title">new post</p>
+            <button class="delete" aria-label="close" id="newpost_close_modal"></button>
+          </header>
+          <section class="modal-card-body">
+            <form method="POST" action="/newpost/">
+              {% csrf_token %}
+                <div class="field">
+                    <label class="label">post content</label>
+                    <div class="control">
+                      <input name="body" class="textarea" placeholder="e.g. i like drinking maple syrup!">
+                    </div>
+                </div>
+                <div class="buttons has-addons is-centered">
+                  <input type="submit" value="post" class="button is-primary"></input>
+                </div>
+            </form>
+          </section>
+        </div>
+      </div>
+
       {% block content %}
 
       {% endblock %}
   </body>
+
+  <script>
+    // new post modal
+    var modal = document.getElementById("newpost_modal")
+    var button = document.getElementById("newpost_button")
+    var close_modal = document.getElementById("newpost_close_modal")
+  
+    button.onclick = function() {
+      modal.style.display="flex";
+    }
+  
+    close_modal.onclick = function() {
+      modal.style.display="none";
+    }
+  </script>
+
 </html>

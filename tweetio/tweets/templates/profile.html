@@ -9,10 +9,10 @@
             <div class="hero-body">
               <div class="container">
                 <h1 class="title">
-                  carol li
+                  {{ account.name }}
                 </h1>
                 <h2 class="subtitle">
-                  @caroljli // vancouver
+                  @{{ user.username }} // {{ account.location }}
                 </h2>
               </div>
             </div>
@@ -20,9 +20,10 @@
         </br>
 
         <div class="box">
-            <h2>canadian bean juice only 🇨🇦</h2>
+            <h2>{{ account.bio }}</h2>
         </div>
 
+        {% for tweet in tweets %}
         <div class="box">
             <article class="media">
                 <figure class="media-left">
@@ -33,19 +34,13 @@
                 <div class="media-content">
                   <div class="content">
                     <p>
-                      <strong>John Smith</strong> <small>@johnsmith</small> <small>31m</small>
+                      <strong>{{ account.name }}</strong> <small>@{{ user.username }}</small> <small>{{ tweet.time }}</small>
                       <br>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare magna eros, eu pellentesque tortor vestibulum ut. Maecenas non massa sem. Etiam finibus odio quis feugiat facilisis.
+                      {{ tweet.body }}
                     </p>
                   </div>
                   <nav class="level is-mobile">
                     <div class="level-left">
-                      <a class="level-item">
-                        <span class="icon is-small"><i class="fas fa-reply"></i></span>
-                      </a>
-                      <a class="level-item">
-                        <span class="icon is-small"><i class="fas fa-retweet"></i></span>
-                      </a>
                       <a class="level-item">
                         <span class="icon is-small"><i class="fas fa-heart"></i></span>
                       </a>
@@ -54,6 +49,7 @@
                 </div>
             </article>
         </div> 
+        {% endfor %}
 
     </div>
     <div class="column is-one-quarter"></div>

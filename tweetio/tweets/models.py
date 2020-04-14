@@ -1,7 +1,9 @@
 from django.db import models
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from django import template
 
+register = template.Library()
 class Account(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
@@ -18,6 +20,16 @@ class Account(models.Model):
             return True
         else:
             return False
+    
+    @property
+    def tweet_count(self):
+        return Tweet.objects.filter(profile=self).count()
+    
+    def has_tweets(self):
+        if self.tweet_count > 0:
+            return True
+        else:
+            return False
 
 class Tweet(models.Model):
     id = models.AutoField(primary_key=True)
@@ -25,6 +37,7 @@ class Tweet(models.Model):
     profile = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
     time = models.DateTimeField(auto_now=True, null=True)
     body = models.TextField(null=True)
+    likes = models.ManyToManyField(User, related_name='likes', blank=True)
     class Meta:
         ordering = ['-time']
     
@@ -45,14 +58,15 @@ class Tweet(models.Model):
             return True
         else:
             return False
-    
-    # def save(self):
-    #     new_id = self.id
-    #     self.string_id = str(new_id)
-    #     super(Tweet, self).save()
+
+    @property
+    def user_like_count(user):
+        return Like.objects.filter(user=user, post=self).count()
+        
 
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    profile = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
     post = models.ForeignKey(Tweet, on_delete=models.CASCADE, null=True)
     time = models.DateTimeField(auto_now=True, null=True)
 

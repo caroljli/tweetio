@@ -12,18 +12,17 @@ def splash(request):
 	    return render(request, "splash.html", {})
 
 def home(request):
+    user = request.user
     tweets = Tweet.objects.all()
     accounts = Account.objects.all()
-    return render(request, "home.html", {"tweets": tweets, "accounts": accounts})
+    return render(request, "home.html", {"tweets": tweets, "accounts": accounts, "user": user})
 
 def profile(request, username=None):
     if User.objects.get(username=username):
         user = User.objects.get(username=username)
         account = Account.objects.get(user=user)
         tweets = Tweet.objects.filter(author=user)
-        return render(request, "profile.html", {
-            "user": user, "account": account, "tweets": tweets
-        })
+        return render(request, "profile.html", {"user": user, "account": account, "tweets": tweets})
     else:
         return render("user not found")
 
@@ -53,6 +52,7 @@ def login_view(request):
     user = authenticate(username=username, password=password)
     if user is not None:
         auth_login(request, user)
+        Like.objects.all().delete()
         return redirect("/home")
     else:
         return redirect("/login")
@@ -78,15 +78,19 @@ def register_view(request):
 # posts
 
 def delete_tweet(request):
-    tweet = Tweet.objects.get(id=request.GET.get('id'))
+    tweet = Tweet.objects.get(id=request.POST.get('id'))
     tweet.delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 def like_clicked(request):
     if 'like' in request.POST:
         post = Tweet.objects.get(id=request.POST.get('like'))
-        new_like, created = Like.objects.get_or_create(user=request.user, post=post)
+        post.likes.add(request.user)
+        account = Account.objects.get(user=request.user)
+        new_like, created = Like.objects.get_or_create(user=request.user, profile=account, post=post)
     else:
         post = Tweet.objects.get(id=request.POST.get('dislike'))
+        post.likes.remove(request.user)
         Like.objects.filter(user=request.user, post=post).delete()
         
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
@@ -94,5 +98,5 @@ def like_clicked(request):
 def newpost(request):
     if request.method == 'POST':
         body = request.POST["body"]
-        Tweet.objects.create(body=body, author=request.user)
+        Tweet.objects.create(body=body, author=request.user, profile=Account.objects.get(user=request.user))
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

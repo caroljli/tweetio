@@ -38,13 +38,13 @@
           </div>
         </section>
 
-        </br>
+        <!-- </br>
 
         <div class="buttons has-addons is-centered">
           <button class="button is-primary is-fullwidth" id="newpost_button">
             <strong>new post</strong>
           </button>
-        </div>
+        </div> -->
 
         </br>
 
@@ -78,6 +78,17 @@
               </br>
 
               {% for tweet in tweets %}
+
+              {% if author.tweet_count > 0 %}
+
+              <div class="box">
+                <h2 class="subtitle">
+                  looks like you don't have any tweets yet! click the new post button to write your first one :>
+                </h2>
+              </div>
+
+              {% else %}
+
               <div class="box">
                 <article class="media">
                     <figure class="media-left">
@@ -114,14 +125,17 @@
                   <footer class="modal-card-foot">
                     <form method="POST" action="/delete_tweet/">
                       {% csrf_token %}
-                      <input type="submit" class="button is-danger" value="delete"></input>
+                      <button type="submit" class="button is-danger" name='id' value='{{ tweet.id }}'>delete</button>
                     </form>
                   </footer>
                 </div>
               </div>
 
-              {% endfor %}
+              {% endif %}
 
+            {% endfor %}
+
+            
             </section>
             <section class="tab-content">
 

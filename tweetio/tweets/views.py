@@ -82,11 +82,12 @@ def delete_tweet(request):
     tweet.delete()
 
 def like_clicked(request):
-    post = Tweet.objects.get(id=request.POST.get('id'))
     if 'like' in request.POST:
+        post = Tweet.objects.get(id=request.POST.get('like'))
         new_like, created = Like.objects.get_or_create(user=request.user, post=post)
     else:
-        Like.objects.get(user=request.user, post=post).delete()
+        post = Tweet.objects.get(id=request.POST.get('dislike'))
+        Like.objects.filter(user=request.user, post=post).delete()
         
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 

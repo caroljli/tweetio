@@ -21,7 +21,6 @@ class Account(models.Model):
 
 class Tweet(models.Model):
     id = models.AutoField(primary_key=True)
-    # str_id = str(id)
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     profile = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
     time = models.DateTimeField(auto_now=True, null=True)

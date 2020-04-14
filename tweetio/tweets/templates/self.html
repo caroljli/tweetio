@@ -134,12 +134,42 @@
                 <h2><strong>location:</strong> {{ account.location }}</h2>
               </div>
 
+              <h1 class="subtitle">{{ account.name }}'s favourite hashtags</h1>
+
               <div class="box">
-                <h2><strong>favourite hashtags</strong></h2>
                 <h2><a>#pancakes</a></h2>
                 <h2><a>#canada</a></h2>
                 <h2><a>#coffee</a></h2>
               </div>
+
+              <h1 class="subtitle">{{ account.name }}'s liked posts</h1>
+
+              {% if account.has_likes %}
+                
+              {% for like in likes %}
+              <div class="box">
+                <article class="media">
+                    <div class="media-content">
+                      <div class="content">
+                        <div class="entry">
+                          <p>
+                            <small>liked on: {{ like.time }}</small>
+                            <br>
+                            <strong>{{ like.get_post_body }}</strong>
+                            <!-- by {{ like.get_username }} -->
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                </article>
+              </div> 
+              {% endfor %}
+              
+              {% else %}
+
+              <p style="color: grey">you haven't liked any posts yet!</p>
+
+              {% endif %}
               
             </section>
             <section class="tab-content">

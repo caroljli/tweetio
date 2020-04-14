@@ -19,7 +19,7 @@ def home(request):
 def profile(request, username=None):
     if User.objects.get(username=username):
         user = User.objects.get(username=username)
-        account = Account.objects.filter(user=user)
+        account = Account.objects.get(user=user)
         tweets = Tweet.objects.filter(author=user)
         return render(request, "profile.html", {
             "user": user, "account": account, "tweets": tweets
@@ -30,10 +30,10 @@ def profile(request, username=None):
 def self(request):
     account = Account.objects.filter(user=request.user)
     tweets = Tweet.objects.filter(author=request.user)
-    likes = Like.objects.filter(profile=request.user)
-    return render(request, "self.html", {"tweets": tweets, "account": account})
+    likes = Like.objects.filter(user=request.user)
+    return render(request, "self.html", {"tweets": tweets, "account": account, "likes": likes})
 
-def hashtag(request):
+def hashtag(request, hashtag=None):
     return render(request, "hashtag.html", {})
 
 def register_complete(request):
@@ -81,19 +81,14 @@ def delete_tweet(request):
     tweet = Tweet.objects.get(id=request.GET.get('id'))
     tweet.delete()
 
-def like_clicked(request, post_id):
-    if request.method == 'POST':
-        if request.user.is_authenticated():
-            post = Tweet.objects.get(id=post_id)
-            if not already_liked_post(request.user, id):
-                Like.objects.create(user=request.user, post=post)
-            else:
-                Like.objects.filter(user=request.user, post=post).delete()
+def like_clicked(request):
+    post = Tweet.objects.get(id=request.POST.get('id'))
+    if 'like' in request.POST:
+        new_like, created = Like.objects.get_or_create(user=request.user, post=post)
+    else:
+        Like.objects.get(user=request.user, post=post).delete()
+        
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
-def already_liked_post(user, post_id):
-    post = Tweet.objects.get(id=post_id)
-    return Like.objects.filer(user=user, post=post).exists()
 
 def newpost(request):
     if request.method == 'POST':

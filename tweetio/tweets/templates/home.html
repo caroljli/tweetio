@@ -38,10 +38,24 @@
                   </div>
                   <nav class="level is-mobile">
                     <div class="level-left">
+                      {% if tweet.already_liked %}
                       <a style="color: coral" class="level-item">
                         <span class="icon is-small"><i class="fas fa-heart"></i></span>
                       </a>
-                      <button class="button is-small is-primary">like</button>
+                      <form method="POST" action="/like_clicked/">
+                        {% csrf_token %}
+                          <div class="buttons">
+                            <button type="submit" name='dislike' value='{{ tweet.id }}' class="button is-small is-primary">dislike</button>
+                          </div>
+                      </form>
+                      {% elif not tweet.already_liked %}
+                      <form method="POST" action="/like_clicked/">
+                        {% csrf_token %}
+                          <div class="buttons">
+                            <button type="submit" name='like' value='{{ tweet.id }}' class="button is-small is-primary">like</button>
+                          </div>
+                      </form>
+                      {% endif %}
                     </div>
                   </nav>
                 </div>
@@ -57,16 +71,17 @@
   // hashtag 
   (function (win,doc) {
       'use strict';
-      var siteURL = 'http://cdevroe.com',
-          entries = doc.querySelectorAll('div.entry > p'),
-          i;
+      var siteURL = '/',
+      entries = doc.querySelectorAll('div.entry > p'),
+      i;
       
       if ( entries.length > 0 ) {
+        axios.post('/hashtag/')
         for (i = 0; i < entries.length; i = i + 1) {
           entries[i].innerHTML = entries[i].innerHTML.replace(/#(\S+)/g,'<a href="'+siteURL+'search/$1" title="Find more posts tagged with #$1">#$1</a>');
         }
       }
-      
+
     }(this, this.document));
 </script>
 

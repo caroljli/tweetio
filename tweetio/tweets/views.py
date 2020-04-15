@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib.auth.models import User
-from tweets.models import Tweet, Account, Like
+from tweets.models import Tweet, Account, Like, Hashtag
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 
@@ -33,7 +33,11 @@ def self(request):
     return render(request, "self.html", {"tweets": tweets, "account": account, "likes": likes})
 
 def hashtag(request, hashtag=None):
-    return render(request, "hashtag.html", {})
+    post = Tweet.objects.get(id=request.POST.get('post'))
+    hashtag, created = Hashtag.objects.get_or_create(content=request.POST.get('hashtag'))
+    post.hashtags.add(hashtag)
+    tweets = Tweet.objects.filter(hashtags__name__icontains=hashtag.content)
+    return render(request, "hashtag.html", {"hashtag": hashtag, "tweets": tweets})
 
 def register_complete(request):
     return render(request, "register-complete.html", {})

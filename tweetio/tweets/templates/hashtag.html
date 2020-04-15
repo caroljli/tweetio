@@ -9,16 +9,17 @@
             <div class="hero-body">
               <div class="container">
                 <h1 class="title">
-                  #coffee
+                  #{{ hashtag.content }}
                 </h1>
                 <h2 class="subtitle">
-                  viewing all posts with hashtag <strong>#coffee</strong>
+                  viewing all posts with hashtag <strong>#{{ hashtag.content }}</strong>
                 </h2>
               </div>
             </div>
         </section>
         </br>
 
+        {% for tweet in tweets %}
         <div class="box">
             <article class="media">
                 <figure class="media-left">
@@ -28,31 +29,40 @@
                 </figure>
                 <div class="media-content">
                   <div class="content">
-                    <p>
-                      <strong>John Smith</strong> <small>@johnsmith</small> <small>31m</small>
-                      <br>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare magna eros, eu pellentesque tortor vestibulum ut. Maecenas non massa sem. Etiam finibus odio quis feugiat facilisis.
-                    </p>
-                  </div>
-                  <nav class="level is-mobile">
-                    <div class="level-left">
-                      <a class="level-item">
-                        <span class="icon is-small"><i class="fas fa-reply"></i></span>
-                      </a>
-                      <a class="level-item">
-                        <span class="icon is-small"><i class="fas fa-retweet"></i></span>
-                      </a>
-                      <a class="level-item">
-                        <span class="icon is-small"><i class="fas fa-heart"></i></span>
-                      </a>
+                    <div class="entry">
+                      <p>
+                        <strong>{{ tweet.get_name }}</strong> <a href="{% url 'profile' tweet.get_username %}">@{{ tweet.get_username }}</a> <small>{{ tweet.time }}</small>
+                        <br>
+                        {{ tweet.body }}
+                      </p>
                     </div>
-                  </nav>
-                </div>
-                <div class="media-right">
-                  <button class="delete"></button>
+                  </div>
+                  <!-- <nav class="level is-mobile">
+                    <div class="level-left">
+                      {% if tweet.already_liked %}
+                        <a style="color: coral" class="level-item">
+                          <span class="icon is-small"><i class="fas fa-heart"></i></span>
+                        </a>
+                        <form method="POST" action="/like_clicked/">
+                          {% csrf_token %}
+                            <div class="buttons">
+                              <button type="submit" name='dislike' value='{{ tweet.id }}' class="button is-small is-primary">dislike</button>
+                            </div>
+                        </form>
+                      {% elif not tweet.already_liked %}
+                      <form method="POST" action="/like_clicked/">
+                        {% csrf_token %}
+                          <div class="buttons">
+                            <button type="submit" name='like' value='{{ tweet.id }}' class="button is-small is-primary">like</button>
+                          </div>
+                      </form>
+                      {% endif %}
+                    </div>
+                  </nav> -->
                 </div>
             </article>
         </div> 
+        {% endfor %}
 
     </div>
     <div class="column is-one-quarter"></div>

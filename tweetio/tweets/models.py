@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django import template
 
 register = template.Library()
+
 class Account(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
@@ -31,6 +32,9 @@ class Account(models.Model):
         else:
             return False
 
+class Hashtag(models.Model):
+    content = models.CharField(max_length=200, null=True)
+
 class Tweet(models.Model):
     id = models.AutoField(primary_key=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
@@ -38,6 +42,7 @@ class Tweet(models.Model):
     time = models.DateTimeField(auto_now=True, null=True)
     body = models.TextField(null=True)
     likes = models.ManyToManyField(User, related_name='likes', blank=True)
+    hashtags = models.ManyToManyField(Hashtag, related_name='hashtags', blank=True)
     class Meta:
         ordering = ['-time']
     
@@ -62,7 +67,6 @@ class Tweet(models.Model):
     @property
     def user_like_count(user):
         return Like.objects.filter(user=user, post=self).count()
-        
 
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
@@ -83,7 +87,3 @@ class Like(models.Model):
                 return self.post.body
         else:
             return
-
-class Hashtag(models.Model):
-    content = models.CharField(max_length=200, null=True)
-    post = models.ForeignKey(Tweet, on_delete=models.CASCADE, null=True)

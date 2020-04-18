@@ -33,6 +33,7 @@ class Account(models.Model):
             return False
 
 class Hashtag(models.Model):
+    id = models.AutoField(primary_key=True)
     content = models.CharField(max_length=200, null=True)
 
 class Tweet(models.Model):

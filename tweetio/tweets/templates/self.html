@@ -101,7 +101,7 @@
                         <p>
                           <strong>{{ account.name }}</strong> <small>@{{ user.username }}</small> <small>{{ tweet.time }}</small>
                           <br>
-                          {{ tweet.body }}
+                          {{ tweet.body|safe }}
                         </p>
                       </div>
                     </div>
@@ -148,14 +148,6 @@
                 <h2><strong>location:</strong> {{ account.location }}</h2>
               </div>
 
-              <h1 class="subtitle">{{ account.name }}'s favourite hashtags</h1>
-
-              <div class="box">
-                <h2><a>#pancakes</a></h2>
-                <h2><a>#canada</a></h2>
-                <h2><a>#coffee</a></h2>
-              </div>
-
               <h1 class="subtitle">{{ account.name }}'s liked posts</h1>
 
               {% if account.has_likes %}
@@ -169,7 +161,7 @@
                           <p>
                             <small>liked on: {{ like.time }}</small>
                             <br>
-                            <strong>{{ like.get_post_body }}</strong>
+                            <strong>{{ like.get_post_body|safe }}</strong>
                             <!-- by {{ like.get_username }} -->
                           </p>
                         </div>

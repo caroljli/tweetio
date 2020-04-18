@@ -33,7 +33,7 @@
                       <p>
                         <strong>{{ tweet.get_name }}</strong> <a href="{% url 'profile' tweet.get_username %}">@{{ tweet.get_username }}</a> <small>{{ tweet.time }}</small>
                         <br>
-                        {{ tweet.body }}
+                        {{ tweet.body|safe }}
                       </p>
                     </div>
                   </div>

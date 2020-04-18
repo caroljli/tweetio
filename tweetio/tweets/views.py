@@ -33,11 +33,9 @@ def self(request):
     return render(request, "self.html", {"tweets": tweets, "account": account, "likes": likes})
 
 def hashtag(request, hashtag=None):
-    post = Tweet.objects.get(id=request.POST.get('post'))
-    hashtag, created = Hashtag.objects.get_or_create(content=request.POST.get('hashtag'))
-    post.hashtags.add(hashtag)
-    tweets = Tweet.objects.filter(hashtags__name__icontains=hashtag.content)
-    return render(request, "hashtag.html", {"hashtag": hashtag, "tweets": tweets})
+    curr_hashtag = Hashtag.objects.get(content=hashtag)
+    tweets = Tweet.objects.filter(hashtags__id=curr_hashtag.id)
+    return render(request, "hashtag.html", {"tweets": tweets, "hashtag": curr_hashtag})
 
 def register_complete(request):
     return render(request, "register-complete.html", {})
@@ -102,9 +100,21 @@ def like_clicked(request):
 def newpost(request):
     if request.method == 'POST':
         body = request.POST["body"]
-        Tweet.objects.create(body=body, author=request.user, profile=Account.objects.get(user=request.user))
-        for word in body:
-            if word == '#':
-                
+        tweet = Tweet.objects.create(body=body, author=request.user, profile=Account.objects.get(user=request.user))
+
+        post_body = tweet.body.split(" ")
+        for n, word in enumerate(post_body):
+            if '#' in word:
+                word = word[1:]
+                if not Hashtag.objects.filter(content=word).exists():
+                    hashtag = Hashtag.objects.create(content=word)
+                else:
+                    hashtag = Hashtag.objects.get(content=word)
+                tweet.hashtags.add(hashtag)
+                post_body[n] = '<a href="' + '/.' + '/hashtag/' + word + '">#' + word + '</a>'
+
+        post_body_str = " ".join(post_body)
+        setattr(tweet, 'body', post_body_str)
+        tweet.save()
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

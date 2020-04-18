@@ -7,6 +7,7 @@ Everything is written in the `tweets` directory.
 To run,
 ```
 pip install -r requirements.txt
+cd tweetio
 python manage.py makemigrations
 python manage.py migrate
 python manage.py runserver

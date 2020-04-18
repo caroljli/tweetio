@@ -103,4 +103,8 @@ def newpost(request):
     if request.method == 'POST':
         body = request.POST["body"]
         Tweet.objects.create(body=body, author=request.user, profile=Account.objects.get(user=request.user))
+        for word in body:
+            if word == '#':
+                
+
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

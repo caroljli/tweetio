@@ -1,4 +1,4 @@
-# tweety app!
+# tweety app! :bird:
 Twitter application developed for CIS 192 (20SP).
 
 ## Routes and Deployment

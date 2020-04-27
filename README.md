@@ -1,5 +1,5 @@
 # tweety app! :bird:
-Twitter application developed for CIS 192 (20SP).
+Twitter application in Django.
 
 ## Routes and Deployment
 Everything is written in the `tweets` directory.

@@ -9,7 +9,7 @@ chardet==3.0.4
 conda==4.8.3
 conda-package-handling==1.6.0
 cryptography==2.8
-Django==3.0.5
+Django==3.0.14
 django-taggit==1.2.0
 fasteners==0.14.1
 gast==0.2.2

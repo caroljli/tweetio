@@ -36,7 +36,7 @@ opt-einsum==3.1.0
 optional-django==0.3.0
 pandas==1.0.2
 plumber==1.5
-protobuf==3.11.4
+protobuf==3.15.0
 pycodestyle==2.5.0
 pycosat==0.6.3
 pycparser==2.19
